@@ -1,25 +1,21 @@
 import tkinter as tk
 from booking import BookingPage
-from reservations import ReservationsPage  # ← لازم تكوني ضفتي الملف ده
+from reservations import ReservationsPage
 
 class HomePage(tk.Frame):
-    def __init__(self, master):
-        super().__init__(master)
-        self.master = master
+    def __init__(self, parent):
+        super().__init__(parent, bg="#e6f2ff")
 
-        master.title("Flight Reservation System")
-        master.geometry("600x400")
+        tk.Label(self, text="Flight Reservation System", font=("Arial", 20, "bold"),
+                 fg="#003366", bg="#e6f2ff").pack(pady=30)
 
-        title = tk.Label(self, text="Welcome to Flight Reservation System", font=("Arial", 18))
-        title.pack(pady=40)
-
-        book_btn = tk.Button(self, text="Book Flight", font=("Arial", 14), width=20, command=self.book_flight)
+        book_btn = tk.Button(self, text="Book a Flight", font=("Arial", 14),
+                             bg="#007acc", fg="white", width=20, command=self.book_flight)
         book_btn.pack(pady=10)
 
-        view_btn = tk.Button(self, text="View Reservations", font=("Arial", 14), width=20, command=self.view_reservations)
+        view_btn = tk.Button(self, text="View Reservations", font=("Arial", 14),
+                             bg="#007acc", fg="white", width=20, command=self.view_reservations)
         view_btn.pack(pady=10)
-
-        self.pack(fill="both", expand=True)
 
     def book_flight(self):
         self.pack_forget()
