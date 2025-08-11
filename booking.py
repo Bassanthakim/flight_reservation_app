@@ -12,13 +12,14 @@ class BookingPage(tk.Frame):
 
         self.fields = {}
 
+        # اسم الحقل في الفورم / اسم العمود في قاعدة البيانات
         form_data = [
             ("Name:", "name"),
-            ("Flight:", "flight"),
-            ("From:", "from_location"),
-            ("To:", "to_location"),
+            ("Flight Number:", "flight_number"),
+            ("Departure:", "departure"),
+            ("Destination:", "destination"),
             ("Date (YYYY-MM-DD):", "date"),
-            ("Seat Number:", "seat")
+            ("Seat Number:", "seat_number")
         ]
 
         form_frame = tk.Frame(self, bg="#e6f2ff")
@@ -37,21 +38,38 @@ class BookingPage(tk.Frame):
                   font=("Arial", 12), bg="#cccccc").pack()
 
     def submit(self):
+        # جمع البيانات من الحقول
         data = {key: field.get().strip() for key, field in self.fields.items()}
 
         if any(value == "" for value in data.values()):
             messagebox.showerror("Error", "All fields are required.")
             return
 
-        conn = sqlite3.connect("flights.db")
-        cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO reservations (name, flight, from_location, to_location, date, seat)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (data["name"], data["flight"], data["from_location"], data["to_location"], data["date"], data["seat"]))
-        conn.commit()
-        conn.close()
+        try:
+            conn = sqlite3.connect("flights.db")
+            cursor = conn.cursor()
 
-        messagebox.showinfo("Success", "Reservation submitted successfully!")
-        for field in self.fields.values():
-            field.delete(0, tk.END)
+            # إدخال البيانات في الجدول
+            cursor.execute('''
+                INSERT INTO reservations (name, flight_number, departure, destination, date, seat_number)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (
+                data["name"],
+                data["flight_number"],
+                data["departure"],
+                data["destination"],
+                data["date"],
+                data["seat_number"]
+            ))
+
+            conn.commit()
+            conn.close()
+
+            messagebox.showinfo("Success", "Reservation submitted successfully!")
+
+            # تفريغ الحقول بعد الحجز
+            for field in self.fields.values():
+                field.delete(0, tk.END)
+
+        except Exception as e:
+            messagebox.showerror("Database Error", f"An error occurred:\n{e}")

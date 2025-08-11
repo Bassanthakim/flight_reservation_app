@@ -21,22 +21,17 @@ class EditReservationPage(tk.Frame):
             entry.pack()
             self.entries.append(entry)
 
-        # زر التحديث
         tk.Button(self, text="Update", command=self.update_reservation).pack(pady=10)
 
-        # زر الرجوع
         tk.Button(self, text="Back", command=self.back_callback).pack()
 
     def update_reservation(self):
-        # نجيب البيانات الجديدة من الحقول
         new_data = [e.get() for e in self.entries]
 
-        # تحقق إن مفيش حقل فاضي
         if not all(new_data):
             messagebox.showerror("Error", "Please fill in all fields.")
             return
 
-        # تحديث في قاعدة البيانات
         conn = sqlite3.connect("flights.db")
         cursor = conn.cursor()
         cursor.execute("""
@@ -48,4 +43,4 @@ class EditReservationPage(tk.Frame):
         conn.close()
 
         messagebox.showinfo("Success", "Reservation updated successfully!")
-        self.back_callback()  # رجوع للصفحة الرئيسية
+        self.back_callback() 

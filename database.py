@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 def create_connection():
     conn = sqlite3.connect('flights.db')
@@ -21,6 +22,6 @@ def create_table():
     conn.commit()
     conn.close()
 
-# لو شغلنا الملف دا بيجهز القاعدة
 if __name__ == '__main__':
     create_table()
+    print("Database created successfully with correct columns!")
